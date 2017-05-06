@@ -15,15 +15,24 @@ namespace texMrSpace
 {
     class stick : Sprite 
     {
-        Vector2 position;
-        Texture2D image;
-        Color tint;
+       
         public stick(Vector2 position, Texture2D image, Color tint  )
             : base (position, image, tint)
         {
             
         
 
+        }
+        public void Update(GameTime gametime, KeyboardState keys)
+        {
+            if(keys.IsKeyDown(Keys.Left))
+            {
+                
+            }
+            if(keys.IsKeyDown(Keys.Right))
+            {
+
+            }
         }
     }
 }
