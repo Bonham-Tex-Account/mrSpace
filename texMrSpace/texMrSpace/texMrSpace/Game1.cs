@@ -17,8 +17,10 @@ namespace texMrSpace
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         KeyboardState keys;
-
-        stick Stick;
+        int X =700;
+        int Y =400;
+        Stick Stick;
+        Sprite Wall;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -39,17 +41,19 @@ namespace texMrSpace
           
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            keys = Keyboard.GetState();
 
-            Stick = new stick(new Vector2(700, 100), Content.Load<Texture2D>("stick-figure1"), Color.CornflowerBlue);
+            Wall = new Sprite(new Vector2(0, 0), Content.Load<Texture2D>("lol"), Color.White);
+            Stick = new Stick(new Vector2(X, Y), Content.Load<Texture2D>("stick-figure1"), Color.CornflowerBlue, 5);
         }
 
       
    
         protected override void Update(GameTime gameTime)
         {
+            keys = Keyboard.GetState();
+            Stick.Update(gameTime, keys,GraphicsDevice.Viewport.Width);
+            
            
-
             base.Update(gameTime);
         }
 
@@ -57,8 +61,11 @@ namespace texMrSpace
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
-
+            spriteBatch.Begin();
+          
+            Wall.Draw(spriteBatch);
+            Stick.Draw(spriteBatch);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

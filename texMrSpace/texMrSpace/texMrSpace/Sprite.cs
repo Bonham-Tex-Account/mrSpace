@@ -42,6 +42,22 @@ namespace texMrSpace
                 _position = value;
             }
         }
+
+        public float X
+        {
+            get
+            {
+                return _position.X;
+            }
+            set
+            {
+                _position.X = value;
+            }
+        }
+
+
+
+
         public Color Tint
         {
             get

@@ -13,25 +13,27 @@ using Microsoft.Xna.Framework.Media;
 
 namespace texMrSpace
 {
-    class stick : Sprite 
+    class Stick : Sprite
     {
-       
-        public stick(Vector2 position, Texture2D image, Color tint  )
-            : base (position, image, tint)
+
+        float speed;
+
+        public Stick(Vector2 position, Texture2D image, Color tint, float speed)
+            : base(position, image, tint)
         {
-            
-        
+
+            this.speed = speed;
 
         }
-        public void Update(GameTime gametime, KeyboardState keys)
+        public void Update(GameTime gametime, KeyboardState keys,int x)
         {
-            if(keys.IsKeyDown(Keys.Left))
+            if (keys.IsKeyDown(Keys.Left)&& X >= 0)
             {
-                
+                X -= speed;
             }
-            if(keys.IsKeyDown(Keys.Right))
+            if (keys.IsKeyDown(Keys.Right)&& X + 50 <= x)
             {
-
+                X += speed;
             }
         }
     }
