@@ -13,10 +13,22 @@ namespace texMrSpace
 {
     class Smashthing : Sprite
     {
-        public Smashthing(Vector2 position,Texture2D image,Color tint)
+        TimeSpan timer = TimeSpan.FromSeconds(0);
+        float speed;
+        public Smashthing(Vector2 position,Texture2D image,Color tint,TimeSpan time,float sped)
             :base(position,image,tint)
         {
-
+            speed = sped;
+            timer = time;
+        }
+        public void Update(GameTime gameTime,int hight)
+        {
+           if (timer == TimeSpan.FromSeconds(3))
+            {
+                Y += speed;
+            }
+           
+           
         }
     }
 }

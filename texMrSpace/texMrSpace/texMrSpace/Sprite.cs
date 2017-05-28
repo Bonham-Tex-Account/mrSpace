@@ -18,7 +18,7 @@ namespace texMrSpace
         private Vector2 _position;
         private Texture2D _image;
         private Color _tint;
-        private Rectangle? _source;
+       
         private Vector2 _origin;
         public Vector2 Origin
         {
@@ -54,7 +54,17 @@ namespace texMrSpace
                 _position.X = value;
             }
         }
-
+        public float Y
+        {
+            get
+            {
+                return _position.Y;
+            }
+            set
+            {
+                _position.Y = value;
+            }
+        }
 
 
 
