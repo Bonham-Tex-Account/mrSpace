@@ -109,7 +109,7 @@ namespace texMrSpace
 
         public void Draw(SpriteBatch spriteBatch)
         {
-            spriteBatch.Draw(_image, _position, _source, _tint, 0f, _origin, 1f, SpriteEffects.None, 1f);
+            spriteBatch.Draw(_image, _position, null, _tint, 0f, _origin, 1f, SpriteEffects.None, 1f);
         }
     }
 }

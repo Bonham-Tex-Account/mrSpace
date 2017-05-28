@@ -17,7 +17,7 @@ namespace texMrSpace
     {
 
         float speed;
-
+        public Rectangle hitbox;
         public Stick(Vector2 position, Texture2D image, Color tint, float speed)
             : base(position, image, tint)
         {
@@ -27,6 +27,7 @@ namespace texMrSpace
         }
         public void Update(GameTime gametime, KeyboardState keys,int x)
         {
+            hitbox = new Rectangle((int)(Position.X), (int)(Position.Y), Image.Width, Image.Height);
             if (keys.IsKeyDown(Keys.Left)&& X >= 0)
             {
                 X -= speed;

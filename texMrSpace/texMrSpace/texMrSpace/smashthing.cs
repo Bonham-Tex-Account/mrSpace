@@ -15,20 +15,41 @@ namespace texMrSpace
     {
         TimeSpan timer = TimeSpan.FromSeconds(0);
         float speed;
-        public Smashthing(Vector2 position,Texture2D image,Color tint,TimeSpan time,float sped)
+        Random random = new Random();
+        int _width;
+        float time = 3;
+        public Rectangle hitbox;
+        public Smashthing(Vector2 position,Texture2D image,Color tint,TimeSpan time,float sped,int width)
             :base(position,image,tint)
         {
             speed = sped;
             timer = time;
+            _width = width;
         }
         public void Update(GameTime gameTime,int hight)
         {
-           if (timer == TimeSpan.FromSeconds(3))
+            hitbox = new Rectangle((int)(Position.X), (int)(Position.Y), Image.Width, Image.Height);
+            timer += gameTime.ElapsedGameTime;
+           if (timer >= TimeSpan.FromSeconds(time))
             {
                 Y += speed;
             }
+           if (Y>=hight)
+            {
+                timer = TimeSpan.FromSeconds(0);
+                Y = -580;
+                X = random.Next(80,_width);
+
+                time *= 0.90f;
+                
+            }
            
            
+        }
+
+        public void AlignWith(Smashthing smash)
+        {
+            Position = new Vector2(smash.Position.X - Image.Width - 80, smash.Position.Y);
         }
     }
 }
