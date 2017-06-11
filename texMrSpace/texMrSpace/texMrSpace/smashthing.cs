@@ -19,6 +19,7 @@ namespace texMrSpace
         int _width;
         float time = 3;
         public Rectangle hitbox;
+        public int score;
         public Smashthing(Vector2 position,Texture2D image,Color tint,TimeSpan time,float sped,int width)
             :base(position,image,tint)
         {
@@ -26,7 +27,7 @@ namespace texMrSpace
             timer = time;
             _width = width;
         }
-        public void Update(GameTime gameTime,int hight)
+        public void Update(GameTime gameTime,int hight,bool yay)
         {
             hitbox = new Rectangle((int)(Position.X), (int)(Position.Y), Image.Width, Image.Height);
             timer += gameTime.ElapsedGameTime;
@@ -34,12 +35,13 @@ namespace texMrSpace
             {
                 Y += speed;
             }
-           if (Y>=hight)
+           if (Y>=hight&& yay==false)
             {
+                
                 timer = TimeSpan.FromSeconds(0);
                 Y = -580;
                 X = random.Next(80,_width);
-
+                score++;
                 time *= 0.90f;
                 
             }
