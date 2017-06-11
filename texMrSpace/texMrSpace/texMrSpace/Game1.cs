@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using System.Xml;
 
 namespace texMrSpace
 {
@@ -33,6 +34,9 @@ namespace texMrSpace
         Rectangle hitbox;
         Rectangle hitbox1;
         Random rand;
+        XmlDocument doc;
+        int highScore;
+        
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -53,13 +57,20 @@ namespace texMrSpace
             font = Content.Load<SpriteFont>("SpriteFont1");
           bigfont = Content.Load<SpriteFont>("SpriteFont2");
             Wall = new Sprite(new Vector2(0, 0), Content.Load<Texture2D>("walls"), Color.White);
-            Stick = new Stick(new Vector2(X, Y), Content.Load<Texture2D>("stick_man"), Color.CornflowerBlue, 5);
-            Stan = new Sprite(new Vector2(rand.Next(0,GraphicsDevice.Viewport.Width-Stan.Image.Width),rand.Next(0,GraphicsDevice.Viewport.Height-Stan.Image.Height)), Content.Load<Texture2D>("stan head"), Color.White);
+            Stick = new Stick(new Vector2(X, Y), Content.Load<Texture2D>("dude"), Color.CornflowerBlue, 5);
+            Stan = new Sprite(new Vector2(0, 0), Content.Load<Texture2D>("stan head"), Color.White);
+            Stan.Position = new Vector2(rand.Next(0, GraphicsDevice.Viewport.Width - Stan.Image.Width), rand.Next(0, GraphicsDevice.Viewport.Height - Stan.Image.Height));
             smash = new Smashthing(new Vector2(lol , -580), Content.Load<Texture2D>("lol"), Color.CornflowerBlue, TimeSpan.FromSeconds(0),5,GraphicsDevice.Viewport.Width);
-            _smash = new Smashthing(new Vector2(smash.Position.X-smash.Image.Width-80, smash.Position.Y), Content.Load<Texture2D>("lol"), Color.CornflowerBlue, TimeSpan.FromSeconds(0), 5,GraphicsDevice.Viewport.Width);
+            _smash = new Smashthing(new Vector2(smash.Position.X-smash.Image.Width-70, smash.Position.Y), Content.Load<Texture2D>("lol"), Color.CornflowerBlue, TimeSpan.FromSeconds(0), 5,GraphicsDevice.Viewport.Width);
+            //doc = new XmlDocument();
+            //doc.Load("Scores.xml");
+            
+            //XmlElement element = doc.GetElementById("Score");
+           // highScore = int.Parse(doc.GetElementById("Score").InnerText);
+
         }
 
-
+        //https://www.youtube.com/watch?v=6sOZmTKctRs
 
         protected override void Update(GameTime gameTime)
         {
@@ -79,6 +90,7 @@ namespace texMrSpace
             if(hitbox.Intersects(hitbox1)&& ms.LeftButton== ButtonState.Pressed&&sum==false)
             {
                 smash.score += 20;
+                yay = true;
                 sum = true;
             }
             base.Update(gameTime);

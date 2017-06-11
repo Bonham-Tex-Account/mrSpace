@@ -69,6 +69,7 @@
     <Content Include="GameThumbnail.png">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
     </Content>
+    <Content Include="Scores.xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\texMrSpaceContent\texMrSpaceContent.contentproj">
