@@ -8,7 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
-using System.Xml;
+using System.Xml.Linq;
 
 namespace texMrSpace
 {
@@ -34,10 +34,12 @@ namespace texMrSpace
         Rectangle hitbox;
         Rectangle hitbox1;
         Random rand;
-        XmlDocument doc;
         Song song;
-        int highScore;
-        
+        List<int> highScores;
+
+        XDocument doc;
+
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -46,30 +48,45 @@ namespace texMrSpace
         }
 
 
-        
+
 
 
         protected override void LoadContent()
         {
-            
+
             spriteBatch = new SpriteBatch(GraphicsDevice);
             rand = new Random();
             song = Content.Load<Song>("boi");
             MediaPlayer.Play(song);
             lol = random.Next(80, GraphicsDevice.Viewport.Width);
             font = Content.Load<SpriteFont>("SpriteFont1");
-          bigfont = Content.Load<SpriteFont>("SpriteFont2");
+            bigfont = Content.Load<SpriteFont>("SpriteFont2");
             Wall = new Sprite(new Vector2(0, 0), Content.Load<Texture2D>("walls"), Color.White);
             Stick = new Stick(new Vector2(X, Y), Content.Load<Texture2D>("dude"), Color.CornflowerBlue, 5);
             Stan = new Sprite(new Vector2(0, 0), Content.Load<Texture2D>("stan head"), Color.White);
             Stan.Position = new Vector2(rand.Next(0, GraphicsDevice.Viewport.Width - Stan.Image.Width), rand.Next(0, GraphicsDevice.Viewport.Height - Stan.Image.Height));
-            smash = new Smashthing(new Vector2(lol , -580), Content.Load<Texture2D>("lol"), Color.CornflowerBlue, TimeSpan.FromSeconds(0),5,GraphicsDevice.Viewport.Width);
-            _smash = new Smashthing(new Vector2(smash.Position.X-smash.Image.Width-70, smash.Position.Y), Content.Load<Texture2D>("lol"), Color.CornflowerBlue, TimeSpan.FromSeconds(0), 5,GraphicsDevice.Viewport.Width);
+            smash = new Smashthing(new Vector2(lol, -580), Content.Load<Texture2D>("lol"), Color.CornflowerBlue, TimeSpan.FromSeconds(0), 5, GraphicsDevice.Viewport.Width);
+            _smash = new Smashthing(new Vector2(smash.Position.X - smash.Image.Width - 70, smash.Position.Y), Content.Load<Texture2D>("lol"), Color.CornflowerBlue, TimeSpan.FromSeconds(0), 5, GraphicsDevice.Viewport.Width);
             //doc = new XmlDocument();
             //doc.Load("Scores.xml");
-            
+
             //XmlElement element = doc.GetElementById("Score");
-           // highScore = int.Parse(doc.GetElementById("Score").InnerText);
+            // highScore = int.Parse(doc.GetElementById("Score").InnerText);
+
+            highScores = new List<int>();
+            doc = XDocument.Load("Scores.xml");
+
+            foreach (XElement score in doc.Root.Elements("Score"))
+            {
+                highScores.Add(int.Parse(score.Value));
+            }
+
+            //you cannot change the value
+            //read only
+            //foreach(int score in highScores)
+            //{
+
+            //}
 
         }
 
@@ -77,20 +94,29 @@ namespace texMrSpace
 
         protected override void Update(GameTime gameTime)
         {
-            hitbox = new Rectangle((int)(Stan.Position.X), (int)(Stan.Position.Y), Stan.Image.Width,Stan.Image.Height);
+            hitbox = new Rectangle((int)(Stan.Position.X), (int)(Stan.Position.Y), Stan.Image.Width, Stan.Image.Height);
             keys = Keyboard.GetState();
             MouseState ms = Mouse.GetState();
             hitbox1 = new Rectangle((int)(ms.X), (int)(ms.Y), 10, 10);
             Stick.Update(gameTime, keys, GraphicsDevice.Viewport.Width);
-            smash.Update(gameTime, GraphicsDevice.Viewport.Height,yay);
-            _smash.Update(gameTime, GraphicsDevice.Viewport.Height,yay);
+            smash.Update(gameTime, GraphicsDevice.Viewport.Height, yay);
+            _smash.Update(gameTime, GraphicsDevice.Viewport.Height, yay);
             _smash.AlignWith(smash);
-            if(smash.hitbox.Intersects(Stick.hitbox)||_smash.hitbox.Intersects(Stick.hitbox))
+            if (smash.hitbox.Intersects(Stick.hitbox) || _smash.hitbox.Intersects(Stick.hitbox))
             {
                 yay = true;
                 Stick.X = 100000;
+
+                for (int i = 0; i < highScores.Count; i++)
+                {
+                    if (smash.score > highScores[i]&&smash.score<highScores[i+1])
+                {
+
+                }
+                }
+
             }
-            if(hitbox.Intersects(hitbox1)&& ms.LeftButton== ButtonState.Pressed&&sum==false)
+            if (hitbox.Intersects(hitbox1) && ms.LeftButton == ButtonState.Pressed && sum == false && yay == false)
             {
                 smash.score += 20;
                 yay = true;
@@ -111,10 +137,19 @@ namespace texMrSpace
             _smash.Draw(spriteBatch);
             Stan.Draw(spriteBatch);
             spriteBatch.DrawString(bigfont, string.Format("{0}", smash.score.ToString()), new Vector2(0, 0), Color.CornflowerBlue);
-           
-            if(smash.score>=20&&yay)
+
+            string highScoreText = "High Scores";
+            
+            for (int i=0;i<highScores.Count;i++)
             {
-                spriteBatch.DrawString(bigfont, ("YOU WIN :)\nTHE SMASHTHING \nSTILL GOT YOU\n:):):):):):):) "), new Vector2(0, 20), Color.Black);
+                highScoreText += $"\n{i + 1}.{highScores[i]}";
+            }
+
+            spriteBatch.DrawString(font, highScoreText, new Vector2(10, 200), Color.Black);
+
+            if (smash.score >= 20 && yay)
+            {
+                spriteBatch.DrawString(bigfont, ("YOU WIN :)"), new Vector2(0, 20), Color.Black);
             }
             else if (yay)
             {
