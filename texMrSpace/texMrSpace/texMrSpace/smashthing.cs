@@ -42,7 +42,7 @@ namespace texMrSpace
                 Y = -580;
                 X = random.Next(80,_width);
                 score++;
-                time *= 0.90f;
+                time *= 1f;
                 
             }
            

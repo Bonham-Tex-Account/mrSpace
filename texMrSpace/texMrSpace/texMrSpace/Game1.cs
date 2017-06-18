@@ -35,6 +35,7 @@ namespace texMrSpace
         Rectangle hitbox1;
         Random rand;
         XmlDocument doc;
+        Song song;
         int highScore;
         
         public Game1()
@@ -53,6 +54,8 @@ namespace texMrSpace
             
             spriteBatch = new SpriteBatch(GraphicsDevice);
             rand = new Random();
+            song = Content.Load<Song>("boi");
+            MediaPlayer.Play(song);
             lol = random.Next(80, GraphicsDevice.Viewport.Width);
             font = Content.Load<SpriteFont>("SpriteFont1");
           bigfont = Content.Load<SpriteFont>("SpriteFont2");
