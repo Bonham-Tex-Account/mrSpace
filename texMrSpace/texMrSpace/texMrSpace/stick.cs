@@ -25,17 +25,17 @@ namespace texMrSpace
             this.speed = speed;
 
         }
-        public void Update(GameTime gametime, KeyboardState keys,int x)
+        public void Update(GameTime gametime, KeyboardState currentkey, KeyboardState previouskey, int x)
         {
             hitbox = new Rectangle((int)(Position.X), (int)(Position.Y), Image.Width, Image.Height);
-            if (keys.IsKeyDown(Keys.Left)&& X >= 0)
+            if (currentkey.IsKeyDown(Keys.Left) && X >= 0 && previouskey.IsKeyUp(Keys.Left))
             {
-                X -= speed;
+                X -= 70;
             }
-            if (keys.IsKeyDown(Keys.Right)&& X + 50 <= x)
+            if (currentkey.IsKeyDown(Keys.Right) && X + 50 <= x && previouskey.IsKeyUp(Keys.Right))
             {
-                X += speed;
-            }
+                X += 70;
+            }            
         }
     }
 }
