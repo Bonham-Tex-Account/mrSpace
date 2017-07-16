@@ -18,7 +18,8 @@ namespace texMrSpace
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
         KeyboardState keys;
-        int X = 700;
+        KeyboardState prevKeys;
+        int X = 0;
         int Y = 400;
         Stick Stick;
         Sprite Wall;
@@ -62,7 +63,7 @@ namespace texMrSpace
             font = Content.Load<SpriteFont>("SpriteFont1");
             bigfont = Content.Load<SpriteFont>("SpriteFont2");
             Wall = new Sprite(new Vector2(0, 0), Content.Load<Texture2D>("walls"), Color.White);
-            Stick = new Stick(new Vector2(X, Y), Content.Load<Texture2D>("dude"), Color.CornflowerBlue, 5);
+            Stick = new Stick(new Vector2(X, Y), Content.Load<Texture2D>("dude"), Color.CornflowerBlue, 70);
             Stan = new Sprite(new Vector2(0, 0), Content.Load<Texture2D>("stan head"), Color.White);
             Stan.Position = new Vector2(rand.Next(0, GraphicsDevice.Viewport.Width - Stan.Image.Width), rand.Next(0, GraphicsDevice.Viewport.Height - Stan.Image.Height));
             smash = new Smashthing(new Vector2(lol, -580), Content.Load<Texture2D>("lol"), Color.CornflowerBlue, TimeSpan.FromSeconds(0), 5, GraphicsDevice.Viewport.Width);
@@ -90,15 +91,29 @@ namespace texMrSpace
 
         }
 
+        protected override void UnloadContent()
+        {
+            doc.Root.RemoveNodes();
+
+            for (int i = 0; i < highScores.Count; i++)
+            {
+                XElement score = new XElement("Score", highScores[i]);
+                doc.Root.Add(score);
+            }
+            doc.Save("Scores.xml");
+
+        }
+        
         //https://www.youtube.com/watch?v=6sOZmTKctRs
 
         protected override void Update(GameTime gameTime)
         {
             hitbox = new Rectangle((int)(Stan.Position.X), (int)(Stan.Position.Y), Stan.Image.Width, Stan.Image.Height);
+            prevKeys = keys;
             keys = Keyboard.GetState();
             MouseState ms = Mouse.GetState();
             hitbox1 = new Rectangle((int)(ms.X), (int)(ms.Y), 10, 10);
-            Stick.Update(gameTime, keys, GraphicsDevice.Viewport.Width);
+            Stick.Update(gameTime, keys, prevKeys, GraphicsDevice.Viewport.Width);
             smash.Update(gameTime, GraphicsDevice.Viewport.Height, yay);
             _smash.Update(gameTime, GraphicsDevice.Viewport.Height, yay);
             _smash.AlignWith(smash);
@@ -106,18 +121,17 @@ namespace texMrSpace
             {
                 yay = true;
                 Stick.X = 100000;
-
-                for (int i = 0; i < highScores.Count; i++)
-                {
-                    if (smash.score > highScores[i]&&smash.score<highScores[i+1])
-                {
-
-                }
-                }
+                //check if score is greater than 3rd high score. if it is, replace 3rd high score with new score
+                //check if 3rd high score greater than 2nd high score. if it is, swap the 2nd and 3rd high score
+                //check if 2nd high score greater than 1st high score. if it is, swap the 1st and 2nd high score
+                smash.deathfunction(highScores);
 
             }
             if (hitbox.Intersects(hitbox1) && ms.LeftButton == ButtonState.Pressed && sum == false && yay == false)
             {
+
+                smash.deathfunction(highScores);
+
                 smash.score += 20;
                 yay = true;
                 sum = true;
@@ -139,8 +153,8 @@ namespace texMrSpace
             spriteBatch.DrawString(bigfont, string.Format("{0}", smash.score.ToString()), new Vector2(0, 0), Color.CornflowerBlue);
 
             string highScoreText = "High Scores";
-            
-            for (int i=0;i<highScores.Count;i++)
+
+            for (int i = 0; i < highScores.Count; i++)
             {
                 highScoreText += $"\n{i + 1}.{highScores[i]}";
             }
