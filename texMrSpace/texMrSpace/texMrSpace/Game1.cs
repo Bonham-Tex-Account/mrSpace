@@ -59,7 +59,7 @@ namespace texMrSpace
             rand = new Random();
             song = Content.Load<Song>("boi");
             MediaPlayer.Play(song);
-            lol = random.Next(80, GraphicsDevice.Viewport.Width);
+            lol = random.Next(70, GraphicsDevice.Viewport.Width);
             font = Content.Load<SpriteFont>("SpriteFont1");
             bigfont = Content.Load<SpriteFont>("SpriteFont2");
             Wall = new Sprite(new Vector2(0, 0), Content.Load<Texture2D>("walls"), Color.White);
@@ -117,6 +117,15 @@ namespace texMrSpace
             smash.Update(gameTime, GraphicsDevice.Viewport.Height, yay);
             _smash.Update(gameTime, GraphicsDevice.Viewport.Height, yay);
             _smash.AlignWith(smash);
+            if (keys.IsKeyDown(Keys.R))
+            {
+                 yay = false;
+                 sum = false;
+                 Stick.X = 0;
+                 Y = 400;
+                smash.score = 0;
+
+            }
             if (smash.hitbox.Intersects(Stick.hitbox) || _smash.hitbox.Intersects(Stick.hitbox))
             {
                 yay = true;
