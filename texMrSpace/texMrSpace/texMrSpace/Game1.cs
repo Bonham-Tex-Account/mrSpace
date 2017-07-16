@@ -90,6 +90,19 @@ namespace texMrSpace
 
         }
 
+        protected override void UnloadContent()
+        {
+            doc.Root.RemoveNodes();
+
+            for (int i = 0; i < highScores.Count; i++)
+            {
+                XElement score = new XElement("Score", highScores[i]);
+                doc.Root.Add(score);
+            }
+            doc.Save("Scores.xml");
+
+        }
+
         //https://www.youtube.com/watch?v=6sOZmTKctRs
 
         protected override void Update(GameTime gameTime)
@@ -106,13 +119,17 @@ namespace texMrSpace
             {
                 yay = true;
                 Stick.X = 100000;
-
+                //check if score is greater than 3rd high score. if it is, replace 3rd high score with new score
+                //check if 3rd high score greater than 2nd high score. if it is, swap the 2nd and 3rd high score
+                //check if 2nd high score greater than 1st high score. if it is, swap the 1st and 2nd high score
                 for (int i = 0; i < highScores.Count; i++)
                 {
-                    if (smash.score > highScores[i]&&smash.score<highScores[i+1])
-                {
-
-                }
+                    if (smash.score >= highScores[i])
+                    {
+                        highScores.Insert(i, smash.score);
+                        highScores.RemoveAt(6);
+                        break;
+                    }
                 }
 
             }
@@ -139,8 +156,8 @@ namespace texMrSpace
             spriteBatch.DrawString(bigfont, string.Format("{0}", smash.score.ToString()), new Vector2(0, 0), Color.CornflowerBlue);
 
             string highScoreText = "High Scores";
-            
-            for (int i=0;i<highScores.Count;i++)
+
+            for (int i = 0; i < highScores.Count; i++)
             {
                 highScoreText += $"\n{i + 1}.{highScores[i]}";
             }
